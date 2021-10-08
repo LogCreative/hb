@@ -10,9 +10,13 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    console.log('a user connected.');
+    username = ""
+    socket.on('username', (usrname) => {
+        username = usrname;
+        console.log(username,' 已连接');
+    })
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        console.log(username,' 已离开');
     });
     socket.on('chat message', (msg) => {
         io.emit('chat message', msg);
