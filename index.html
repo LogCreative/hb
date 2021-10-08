@@ -24,10 +24,11 @@
           list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
+      #messages > li:nth-child(even) { background: #ffffff; }
 
       #overlay { 
         position: fixed;
-        display: block;
+        display: none;
         width: 100%;
         height: 100%;
         top: 0;
@@ -327,12 +328,29 @@
 
             import * as THREE from 'https://cdn.skypack.dev/three/build/three.module.js';
 
-            import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
+            // import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
+
+            import { MTLLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/MTLLoader.js';
+
+            import { OBJLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/OBJLoader.js'
 
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 			const renderer = new THREE.WebGLRenderer();
+
+            //  // turn on the physically correct lighting model
+            // renderer.physicallyCorrectLights = true;
+
+            // const light = new THREE.DirectionalLight('white', 8);
+
+            // // move the light right, up, and towards us
+            // light.position.set(10, 10, 10);
+
+            // scene.add(light)
+
+
+
 
             function onWindowResize(){
                 const aspect = window.innerWidth / window.innerHeight;
@@ -345,14 +363,42 @@
             window.addEventListener( 'resize', onWindowResize);
 			document.body.appendChild( renderer.domElement );
 
-            // https://git.sjtu.edu.cn/longlaoda123456/hb/-/raw/master/cake.glb
+            // const loader = new GLTFLoader();
+
+            // loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0003.glb', function ( gltf ) {
+
+            //     const model = gltf.scene;
+			// 	model.position.set( 0, 0, 0 );
+			// 	model.scale.set( 15, 15, 15 );
+			// 	scene.add( model );
+
+            // }, undefined, function ( error ) {
+            //     console.error( error );
+            // } );
+
+            new MTLLoader().load('https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.mtl', function(materials){
+                console.log(materials);
+                materials.preload();
+                new OBJLoader().setMaterials(materials).load('https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.obj', function(object){
+                    // object.traverse((child)=>{
+                    //     child.castShadow = true;
+                    //     child.receiveShadow = true;
+                    // });
+                    object.scale.set(0.01,0.01,0.01);
+                    scene.add(object);
+                })
+            })
+
+
+
+            scene.background = new THREE.Color('skyblue');
 
 			const geometry = new THREE.BoxGeometry();
 			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			const cube = new THREE.Mesh( geometry, material );
 			scene.add( cube );
 
-			camera.position.z = 5;
+			camera.position.z = 10;
 
 			const animate = function () {
 				requestAnimationFrame( animate );
