@@ -340,12 +340,17 @@
             //  // turn on the physically correct lighting model
             // renderer.physicallyCorrectLights = true;
 
-            const light = new THREE.DirectionalLight('white', 1.5);
+            const leftlight = new THREE.DirectionalLight('white', 0.9);
 
             // move the light right, up, and towards us
-            light.position.set(1,1,1);
+            leftlight.position.set(1,1,1);
 
-            scene.add(light)
+            const rightlight = new THREE.DirectionalLight('white', 1.1);
+
+            // move the light right, up, and towards us
+            rightlight.position.set(-1,1,1);
+
+            scene.add(leftlight, rightlight)
 
             function onWindowResize(){
                 const aspect = window.innerWidth / window.innerHeight;
@@ -369,7 +374,7 @@
 
             var model;
 
-            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0004.glb', function ( gltf ) {
+            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0005.glb', function ( gltf ) {
 
                 model = gltf.scene;
 				model.position.set( 0, 0, 0 );
