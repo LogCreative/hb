@@ -13,6 +13,9 @@
       #inputmsg { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
       #inputmsg:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+      #wishbtn, #blowbtn, #dividebtn {
+          display: none;
+      }
 
       #messages { 
           position:absolute;
@@ -44,37 +47,43 @@
         -ms-transform: translate(-50%,-50%);
      }
 
-     .wish{
-         background-color: yellow;
-         padding: 20px;
-         text-align: center;
-     }
-
-     .caption{
-         font-size:larger;
+     #usrcnt{
+         position:absolute;
+         top:0;
+         right:0;
+         padding-right: 5px;
      }
     </style>
   </head>
   <body>
     <div id="overlay">
         <div id="overlaybox">
-            <input id="username" autocomplete="off">
-            <button onclick="submitName()">提交姓名</button>
+            <input id="username" autocomplete="off"><br>
+            <button onclick="submitName()">提交姓名</button><input id="star" type="checkbox">我是寿星
         </div>
     </div>
+    <div id="usrcnt"></div>
     <ul id="messages"></ul>
     <div id="form">
-      <input id="inputmsg"/><button onclick="send()">发送</button><button onclick="wish()">许愿</button><button onclick="blow()">吹蜡烛</button><button onlick="divide">分蛋糕</button>
+      <input id="inputmsg"/><button onclick="send()">发送</button><button id="wishbtn" onclick="wish()">许愿</button><button id="blowbtn" onclick="blow()">吹蜡烛</button><button id="dividebtn" onlick="divide()">分蛋糕</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/socket.io@4.2.0/client-dist/socket.io.min.js"></script>
     <script>
         var socket = io();
-        var username = ""
+        var username = "";
+        var usercount = 1;
 
         function submitName(){
             username = document.getElementById("username").value;
-            socket.emit('username',username);
-            document.getElementById("overlay").style.display="none";
+            if (username){
+                if (document.getElementById("star").value){
+                    document.getElementById("wishbtn").style.display="block";
+                    document.getElementById("blowbtn").style.display="block";
+                    document.getElementById("dividebtn").style.display="block";
+                }
+                socket.emit('username',username);
+                document.getElementById("overlay").style.display="none";
+            }
         }
 
         var inputmsg = document.getElementById('inputmsg');
@@ -94,11 +103,11 @@
         }
 
         function blow(){
-
+            socket.emit('blow caddle');
         }
 
         function divide(){
-
+            socket.emit('divide cake');
         }
 
         socket.on('chat message', function(usrmsg) {
@@ -110,10 +119,15 @@
 
         socket.on('wish message', function(usrmsg) {
             var item = document.createElement('li');
-            item.innerHTML = "<p class=\"header\"><b>" + usrmsg.username + "</b> 许下了心愿</p><p class=\"caption\">" + usrmsg.msg + "</p>";
-            item.className = "wish";
+            item.innerHTML = "<b>" + usrmsg.username + "</b> 许下了心愿" + usrmsg.msg;
+            // append a wish overlay
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('online number', function(usrcount) {
+            document.getElementById('usrcnt').textContent = "在线人数：" + usrcount;
+            usercount = parseInt(usrcount);
         });
     </script>
   </body>
