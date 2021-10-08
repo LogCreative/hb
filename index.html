@@ -330,6 +330,8 @@
 
             import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
 
+            import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
+
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
@@ -338,7 +340,7 @@
             //  // turn on the physically correct lighting model
             // renderer.physicallyCorrectLights = true;
 
-            const light = new THREE.DirectionalLight('white', 2);
+            const light = new THREE.DirectionalLight('white', 1.5);
 
             // move the light right, up, and towards us
             light.position.set(1,1,1);
@@ -354,18 +356,27 @@
             onWindowResize();
 
             window.addEventListener( 'resize', onWindowResize);
-			document.body.appendChild( renderer.domElement );
+
+            const controls = new OrbitControls( camera, renderer.domElement );
+			controls.target.set( 0, 0.5, 0 );
+			controls.update();
+			controls.enablePan = false;
+			controls.enableDamping = true;
+
+            document.body.appendChild( renderer.domElement );
 
             const loader = new GLTFLoader();
 
             var model;
 
-            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.glb', function ( gltf ) {
+            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0004.glb', function ( gltf ) {
 
                 model = gltf.scene;
 				model.position.set( 0, 0, 0 );
-				model.scale.set( 0.02, 0.02, 0.02 );
+				model.scale.set( 0.002, 0.002, 0.002 );
 				scene.add( model );
+
+                animate();
 
             }, undefined, function ( error ) {
                 console.error( error );
@@ -374,6 +385,7 @@
             scene.background = new THREE.Color('skyblue');
 
 			camera.position.z = 10;
+            camera.position.y = 1;
 
 			const animate = function () {
 				requestAnimationFrame( animate );
@@ -381,10 +393,11 @@
 				// model.rotation.x += 0.01;
 				model.rotation.y += 0.01;
 
+                controls.update();
+
 				renderer.render( scene, camera );
 			};
 
-			animate();
 		</script>
   </body>
 </html>
