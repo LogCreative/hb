@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
         console.log(username,' 已离开');
     });
     socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
+        io.emit('chat message', {username, msg});
     });
 });
 
