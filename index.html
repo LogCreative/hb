@@ -342,12 +342,12 @@
             //  // turn on the physically correct lighting model
             // renderer.physicallyCorrectLights = true;
 
-            // const light = new THREE.DirectionalLight('white', 8);
+            const light = new THREE.DirectionalLight('white', 3);
 
-            // // move the light right, up, and towards us
-            // light.position.set(10, 10, 10);
+            // move the light right, up, and towards us
+            light.position.set(1,1,1);
 
-            // scene.add(light)
+            scene.add(light)
 
 
 
@@ -384,12 +384,11 @@
                     //     child.castShadow = true;
                     //     child.receiveShadow = true;
                     // });
-                    object.scale.set(0.01,0.01,0.01);
+                    object.scale.set(0.02,0.02,0.02);
+                    object.rotation.x = 20;
                     scene.add(object);
                 })
             })
-
-
 
             scene.background = new THREE.Color('skyblue');
 
