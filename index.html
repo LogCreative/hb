@@ -328,7 +328,7 @@
 
             import * as THREE from 'https://cdn.skypack.dev/three/build/three.module.js';
 
-            // import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
+            import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
 
             import { MTLLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/MTLLoader.js';
 
@@ -339,8 +339,8 @@
 
 			const renderer = new THREE.WebGLRenderer();
 
-            //  // turn on the physically correct lighting model
-            // renderer.physicallyCorrectLights = true;
+             // turn on the physically correct lighting model
+            renderer.physicallyCorrectLights = true;
 
             const light = new THREE.DirectionalLight('white', 3);
 
@@ -348,8 +348,6 @@
             light.position.set(1,1,1);
 
             scene.add(light)
-
-
 
 
             function onWindowResize(){
@@ -363,32 +361,18 @@
             window.addEventListener( 'resize', onWindowResize);
 			document.body.appendChild( renderer.domElement );
 
-            // const loader = new GLTFLoader();
+            const loader = new GLTFLoader();
 
-            // loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0003.glb', function ( gltf ) {
+            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0003.glb', function ( gltf ) {
 
-            //     const model = gltf.scene;
-			// 	model.position.set( 0, 0, 0 );
-			// 	model.scale.set( 15, 15, 15 );
-			// 	scene.add( model );
+                const model = gltf.scene;
+				model.position.set( 0, 0, 0 );
+				model.scale.set( 15, 15, 15 );
+				scene.add( model );
 
-            // }, undefined, function ( error ) {
-            //     console.error( error );
-            // } );
-
-            new MTLLoader().load('https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.mtl', function(materials){
-                console.log(materials);
-                materials.preload();
-                new OBJLoader().setMaterials(materials).load('https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.obj', function(object){
-                    // object.traverse((child)=>{
-                    //     child.castShadow = true;
-                    //     child.receiveShadow = true;
-                    // });
-                    object.scale.set(0.02,0.02,0.02);
-                    object.rotation.x = 20;
-                    scene.add(object);
-                })
-            })
+            }, undefined, function ( error ) {
+                console.error( error );
+            } );
 
             scene.background = new THREE.Color('skyblue');
 
