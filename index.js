@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
         io.emit('wish message', {username, msg});
     });
     socket.on('blow caddle', () => {
-        io.emit('blow caddle');
+        io.emit('blow caddle', username);
     });
     socket.on('divide cake', () => {
         io.emit('divide cake');
