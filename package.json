@@ -1,0 +1,9 @@
+{
+    "name": "hb",
+    "version": "0.0.1",
+    "description": "happy birthday website",
+    "dependencies": {
+        "express": "^4.17.1",
+        "socket.io": "^4.2.0"
+    }
+}
