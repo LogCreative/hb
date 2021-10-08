@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
         console.log(username,' 已离开');
-        usrcount -= 1;
+        if (usrcount>0) usrcount -= 1;
         io.emit('online number', usrcount);
     });
     socket.on('chat message', (msg) => {
