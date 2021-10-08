@@ -330,25 +330,20 @@
 
             import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
 
-            import { MTLLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/MTLLoader.js';
-
-            import { OBJLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/OBJLoader.js'
-
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 			const renderer = new THREE.WebGLRenderer();
 
-             // turn on the physically correct lighting model
-            renderer.physicallyCorrectLights = true;
+            //  // turn on the physically correct lighting model
+            // renderer.physicallyCorrectLights = true;
 
-            const light = new THREE.DirectionalLight('white', 3);
+            const light = new THREE.DirectionalLight('white', 2);
 
             // move the light right, up, and towards us
             light.position.set(1,1,1);
 
             scene.add(light)
-
 
             function onWindowResize(){
                 const aspect = window.innerWidth / window.innerHeight;
@@ -363,11 +358,13 @@
 
             const loader = new GLTFLoader();
 
-            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake0003.glb', function ( gltf ) {
+            var model;
 
-                const model = gltf.scene;
+            loader.load( 'https://cdn.jsdelivr.net/gh/LogCreative/ReturnGenerator/cake.glb', function ( gltf ) {
+
+                model = gltf.scene;
 				model.position.set( 0, 0, 0 );
-				model.scale.set( 15, 15, 15 );
+				model.scale.set( 0.02, 0.02, 0.02 );
 				scene.add( model );
 
             }, undefined, function ( error ) {
@@ -376,18 +373,13 @@
 
             scene.background = new THREE.Color('skyblue');
 
-			const geometry = new THREE.BoxGeometry();
-			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			const cube = new THREE.Mesh( geometry, material );
-			scene.add( cube );
-
 			camera.position.z = 10;
 
 			const animate = function () {
 				requestAnimationFrame( animate );
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
+				// model.rotation.x += 0.01;
+				model.rotation.y += 0.01;
 
 				renderer.render( scene, camera );
 			};
