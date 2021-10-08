@@ -5,12 +5,20 @@
     <style>
       body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
+      button{
+          cursor: pointer;
+      }
+
       #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
+      #inputmsg { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #inputmsg:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages { 
+          position:absolute;
+          left:0px;
+          bottom: 3rem;
+          list-style-type: none; margin: 0; padding: 0; }
       #messages > li { padding: 0.5rem 1rem; }
       #messages > li:nth-child(odd) { background: #efefef; }
 
@@ -35,6 +43,16 @@
         transform: translate(-50%,-50%);
         -ms-transform: translate(-50%,-50%);
      }
+
+     .wish{
+         background-color: yellow;
+         padding: 20px;
+         text-align: center;
+     }
+
+     .caption{
+         font-size:larger;
+     }
     </style>
   </head>
   <body>
@@ -45,9 +63,9 @@
         </div>
     </div>
     <ul id="messages"></ul>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
+    <div id="form">
+      <input id="inputmsg"/><button onclick="send()">发送</button><button onclick="wish()">许愿</button><button onclick="blow()">吹蜡烛</button><button onlick="divide">分蛋糕</button>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/socket.io@4.2.0/client-dist/socket.io.min.js"></script>
     <script>
         var socket = io();
@@ -59,20 +77,41 @@
             document.getElementById("overlay").style.display="none";
         }
 
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
+        var inputmsg = document.getElementById('inputmsg');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-                socket.emit('chat message', input.value);
-                input.value = '';
+        function send(){
+            if (inputmsg.value) {
+                socket.emit('chat message', inputmsg.value);
+                inputmsg.value = '';
             }
-        });
+        }
+
+        function wish(){
+            if (inputmsg.value) {
+                socket.emit('wish message', inputmsg.value);
+                inputmsg.value = '';
+            }
+        }
+
+        function blow(){
+
+        }
+
+        function divide(){
+
+        }
 
         socket.on('chat message', function(usrmsg) {
             var item = document.createElement('li');
             item.innerHTML = "<b>" + usrmsg.username + "</b> " + usrmsg.msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('wish message', function(usrmsg) {
+            var item = document.createElement('li');
+            item.innerHTML = "<p class=\"header\"><b>" + usrmsg.username + "</b> 许下了心愿</p><p class=\"caption\">" + usrmsg.msg + "</p>";
+            item.className = "wish";
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });

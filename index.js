@@ -21,6 +21,9 @@ io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         io.emit('chat message', {username, msg});
     });
+    socket.on('wish message', (msg) => {
+        io.emit('wish message', {username, msg});
+    });
 });
 
 server.listen(3000, () => {
