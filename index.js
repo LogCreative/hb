@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 usrcount = 0;
 
 io.on('connection', (socket) => {
-    username = ""
+    var username = ""
     socket.on('username', (usrname) => {
         username = usrname;
         console.log(username,' 已连接');
