@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
     <style>
       body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
@@ -70,6 +72,14 @@
       <input id="inputmsg"/><button id="sendbtn">发送</button><button id="wishbtn">许愿</button><button id="blowbtn">吹蜡烛</button><button id="dividebtn">分蛋糕</button>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/socket.io@4.2.0/client-dist/socket.io.min.js"></script>
+    <script type="importmap">
+    {
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.133.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.133.0/examples/jsm/"
+    }
+    }
+    </script>
     <script type="module">
         var socket = io();
         var username = "";
@@ -139,11 +149,9 @@
             usercount = parseInt(usrcount);
         });
 
-            import * as THREE from 'https://cdn.skypack.dev/three/build/three.module.js';
-
-            import { GLTFLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/GLTFLoader.js';
-
-            import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
+            import * as THREE from 'three';
+            import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+            import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 			const scene = new THREE.Scene();
 			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -364,7 +372,7 @@ render();
 function render(){
   flameid = requestAnimationFrame(render);
   time += clock.getDelta();
-  console.log(time);
+  // console.log(time);
   flameMaterials[0].uniforms.time.value = time;
   flameMaterials[1].uniforms.time.value = time;
   candleLight2.position.x = Math.sin(time * Math.PI) * 0.25;
