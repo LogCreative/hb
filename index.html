@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy 520</title>
     <style>
       body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
@@ -14,7 +14,7 @@
       #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: absolute; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
       #inputmsg { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
       #inputmsg:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; font-size: x-small; }
       #wishbtn, #blowbtn, #dividebtn {
           display: none;
       }
@@ -63,7 +63,7 @@
     <div id="overlay">
         <div id="overlaybox">
             <input id="username" autocomplete="off"><br>
-            <button id="namesubmitbtn">提交姓名</button><input id="starbox" type="checkbox">我是寿星
+            <button id="namesubmitbtn">提交姓名</button><input id="starbox" type="checkbox">我是主角
         </div>
     </div>
     <div id="usrcnt"></div>
@@ -81,7 +81,7 @@
     }
     </script>
     <script type="module">
-        var socket = io();
+        // var socket = io();
         var username = "";
         var usercount = 1;
 
@@ -94,7 +94,7 @@
                     document.getElementById("blowbtn").style.display="block";
                     document.getElementById("dividebtn").style.display="block";
                 }
-                socket.emit('username',username);
+                // socket.emit('username',username);
                 document.getElementById("overlay").style.display="none";
             }
         });
@@ -105,7 +105,8 @@
         document.getElementById('sendbtn').addEventListener('click',
         function(){
             if (inputmsg.value) {
-                socket.emit('chat message', inputmsg.value);
+                chat_message(inputmsg.value)
+                // socket.emit('chat message', inputmsg.value);
                 inputmsg.value = '';
             }
         });
@@ -113,41 +114,52 @@
         document.getElementById('wishbtn').addEventListener('click',
         function(){
             if (inputmsg.value) {
-                socket.emit('wish message', inputmsg.value);
+                wish_message(inputmsg.value)
+                // socket.emit('wish message', inputmsg.value);
                 inputmsg.value = '';
             }
         });
 
         document.getElementById('blowbtn').addEventListener('click',
         function(){
-            socket.emit('blow caddle');
+            blow_caddle(username);
+            // socket.emit('blow caddle');
         }
         );
 
         document.getElementById('dividebtn').addEventListener('click',
         function(){
-            socket.emit('divide cake');
+            divide_cake();
+            // socket.emit('divide cake');
         });
 
-        socket.on('chat message', function(usrmsg) {
+        function chat_message(msg){
             var item = document.createElement('li');
-            item.innerHTML = "<b>" + usrmsg.username + "</b> " + usrmsg.msg;
+            item.innerHTML = "<b>" + username + "</b> " + msg;
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
-        });
+        }
 
-        socket.on('wish message', function(usrmsg) {
+        function wish_message(msg){
             var item = document.createElement('li');
-            item.innerHTML = "<b>" + usrmsg.username + "</b> 许下了心愿<br>\"" + usrmsg.msg+"\"";
+            item.innerHTML = "<b>" + username + "</b> 许下了心愿<br>\"" + msg+"\"";
             // append a wish overlay
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
-        });
+        }
 
-        socket.on('online number', function(usrcount) {
-            document.getElementById('usrcnt').textContent = "在线人数：" + usrcount;
-            usercount = parseInt(usrcount);
-        });
+        // socket.on('chat message', function(usrmsg) {
+        //     chat_message(usrmsg);
+        // });
+
+        // socket.on('wish message', function(usrmsg) {
+        //     wish_message(usrmsg);
+        // });
+
+        // socket.on('online number', function(usrcount) {
+        //     document.getElementById('usrcnt').textContent = "在线人数：" + usrcount;
+        //     usercount = parseInt(usrcount);
+        // });
 
             import * as THREE from 'three';
             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -230,10 +242,9 @@
 
             const globalPlaneL = new THREE.Plane( new THREE.Vector3( - 1, 0, 0 ), 0.1 );
 
-            
-        socket.on('blow caddle', function(usrname){
+        function blow_caddle(username) {
             var item = document.createElement('li');
-            item.innerHTML = "吹蜡烛啦！快唱生日歌吧！";
+            item.innerHTML = "吹蜡烛啦！";
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
 
@@ -390,21 +401,26 @@ function render(){
     cancelAnimationFrame(flameid);
     scene.background = new THREE.Color('skyblue');
     var item = document.createElement('li');
-            item.innerHTML = "祝<b>"+ usrname + "</b>生日快乐！";
+            item.innerHTML = "祝<b>"+ usrname + "</b>520快乐！";
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
   }
 }
 
-        });
+        }
 
-        socket.on('divide cake', function(){
+        //  socket.on('blow caddle', function(usrname){
+        //     blow_caddle(usrname);
+        //   });
+
+        function divide_cake(){
             var item = document.createElement('li');
             item.innerHTML = "分蛋糕啦！";
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
-            if (usercount>=2){
-                var theta = 2*Math.PI/usercount;
+            var cakecount = usercount + 2;
+            if (cakecount>=2){
+                var theta = 2*Math.PI/cakecount;
                 var globalPlaneR = new THREE.Plane( new THREE.Vector3( Math.cos(theta), 0, Math.sin(theta) ), 0.1 );
 
                 renderer.clippingPlanes = [ globalPlaneL, globalPlaneR ]; // GUI sets it to globalPlanes
@@ -414,7 +430,11 @@ function render(){
                 cancelAnimationFrame( id );
             }
         
-        });
+        }
+
+        // socket.on('divide cake', function(){
+        //     divide_cake();
+        // });
 
         controls.addEventListener('change', function(){
             renderer.render( scene, camera );
